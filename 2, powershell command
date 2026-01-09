@@ -1,5 +1,0 @@
-run this command in powershell with admin rights:
-command:
-takeown /f "C:\Users\Captain America\john180j1w.zip"
-icacls "C:\Users\Captain America\john180j1w.zip" /grant administrators:F
-Remove-Item -Path "C:\Users\Captain America\john180j1w.zip" -Force
