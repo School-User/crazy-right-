@@ -1,0 +1,18 @@
+# 1. Initialize faillock (preauth)
+# 'silent' prevents the "Login incorrect" message from appearing twice
+auth    required    pam_faillock.so preauth silent audit
+
+# 2. Standard Unix authentication
+# [success=1] means if password is correct, skip the next line (the failure record)
+auth    [success=1 default=ignore]    pam_unix.so nullok
+
+# 3. Record failure
+# If we reached here, pam_unix failed. [default=die] ends the attempt.
+auth    [default=die]    pam_faillock.so authfail audit
+
+# 4. Success Reset
+# If pam_unix succeeded and skipped line 3, this clears the failure counter.
+auth    sufficient    pam_faillock.so authsucc
+
+# 5. Default Permit (Usually at the end of the file)
+auth    required    pam_permit.so
