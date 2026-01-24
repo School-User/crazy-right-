@@ -1,3 +1,5 @@
+# add this in /etc/pam.d/common-auth
+
 # 1. Initialize faillock (preauth)
 # 'silent' prevents the "Login incorrect" message from appearing twice
 auth    required    pam_faillock.so preauth silent audit
