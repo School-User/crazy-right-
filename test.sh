@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define output file path
-OUTPUT_FILE="$HOME/Desktop/universal_audit_$(date +%Y%m%d_%H%M%S).txt"
+OUTPUT_FILE="$HOME/Desktop/system_audit_$(date +%Y%m%d_%H%M%S).txt"
 
 {
     echo "=========================================="
@@ -35,15 +35,15 @@ OUTPUT_FILE="$HOME/Desktop/universal_audit_$(date +%Y%m%d_%H%M%S).txt"
     ls /usr/share/applications/*.desktop 2>/dev/null | xargs -n 1 basename | sed 's/.desktop//' | sort | column
     echo ""
 
-    echo "--- RECENT CONFIG CHANGES (Global /etc - Last 7 Days) ---"
-    # Added 'ls -lt' to sort by time (newest first)
-    find /etc -maxdepth 2 -type f -mtime -7 2>/dev/null -exec ls -lt {} + | head -n 100 | awk '{print $NF}'
+    echo "--- GLOBAL CONFIG LOCATIONS & TIME (/etc - Last 180 Days) ---"
+    # Logic: find files modified in last 180 days, sort by time, show Month/Day/Time and Path
+    find /etc -maxdepth 3 -type f -mtime -180 2>/dev/null -exec ls -lt {} + | head -n 200 | awk '{print $6, $7, $8, "->", $NF}'
     echo ""
 
-    echo "--- RECENT USER CONFIG CHANGES (Home - Last 90 Days) ---"
-    # Added 'ls -lt' to sort by time (newest first) and kept the 90-day window
-    find "$HOME" -maxdepth 2 -name ".*" -mtime -90 2>/dev/null -exec ls -lt {} + | head -n 100 | awk '{print $NF}'
+    echo "--- USER CONFIG LOCATIONS & TIME ($HOME - Last 180 Days) ---"
+    # Logic: find hidden files in Home modified in last 180 days, sort by time, show Month/Day/Time and Path
+    find "$HOME" -maxdepth 3 -name ".*" -mtime -180 2>/dev/null -exec ls -lt {} + | head -n 200 | awk '{print $6, $7, $8, "->", $NF}'
 
 } > "$OUTPUT_FILE"
 
-echo "Report generated successfully: $OUTPUT_FILE"
+echo "Audit complete! Your report is here: $OUTPUT_FILE"
