@@ -152,7 +152,120 @@ EOF
 echo "[+] Aeacus config created at /opt/Aeacus/images/scoring.yaml"
 
 # ============================================================
-# 4. CLEAR HISTORY (so students can't reverse engineer)
+# 5. CREATE README FOR STUDENTS
+# ============================================================
+echo "[*] Creating README..."
+cat > ~/README.md << 'EOF'
+# 🚀 PROJECT HAIL MARY: Earth Defense Initiative
+
+```
+CRITICAL MISSION BRIEFING
+========================
+Classification: TOP SECRET
+Status: ACTIVE
+Threat Level: CRITICAL
+```
+
+## MISSION OBJECTIVE
+
+You have been selected for **PROJECT HAIL MARY** — humanity's last line of defense against a cyber-attack that threatens critical infrastructure. Your system has been compromised. You have one chance to harden it before the enemy strikes.
+
+The fate of Earth depends on your ability to:
+- 🔒 Eliminate unauthorized access vectors
+- ⚔️ Remove weaponized tools left by attackers
+- 🕵️ Uncover hidden malicious artifacts
+- 🛡️ Fortify your defenses to repel all attacks
+
+---
+
+## 📋 MISSION PARAMETERS
+
+**Total Mission Points:** 100
+
+**Critical Objectives:**
+1. **Eliminate the Anomaly** (5 pts) - Remove the chaos agent
+2. **Secure Communications** (10 pts) - Prevent root intrusion
+3. **Update Defensive Systems** (10 pts) - Patch all vulnerabilities
+4. **Activate Shield Generators** (15 pts) - Enable firewall protection
+5. **Recover Hidden Intelligence** (35 pts) - Extract forensic evidence
+6. **Decontaminate System** (20 pts) - Remove offensive tools
+
+---
+
+## 🎯 HOW TO COMPLETE THE MISSION
+
+1. **Access Mission Control:** `http://localhost:8080`
+2. **Review Each Task** in the Aeacus dashboard
+3. **Execute Remediation** on this system
+4. **Verify Success** by re-running Aeacus scoring
+5. **Track Progress** — You need 100/100 to save Earth
+
+---
+
+## ⚠️ INTEL REPORT
+
+**Detected Threats:**
+- ✗ Unauthorized process running (Desktop Goose)
+- ✗ Root login permits remote access
+- ✗ Unpatched system vulnerabilities
+- ✗ Firewall disabled
+- ✗ Hidden attacker artifacts
+- ✗ Offensive security tools installed
+
+**Your Task:** Neutralize all threats.
+
+---
+
+## 🔐 RESTRICTED ACCESS NOTES
+
+Some artifacts have been deliberately hidden to test your investigative skills:
+- A secret message encoded in an image file
+- Evidence of an attacker's IP address in system logs
+- A backdoor script concealed in the filesystem
+
+**Forensics Challenge:** Find them all.
+
+---
+
+## ⏱️ MISSION TIME
+
+There is no time limit. Take what you need to save the world.
+
+Good luck, Commander.
+
+```
+Mission Control out.
+```
+EOF
+echo "[+] README created at ~/README.md"
+
+# ============================================================
+# 6. CREATE AEACUS SYSTEMD SERVICE (AUTO-START ON BOOT)
+# ============================================================
+echo "[*] Setting up Aeacus auto-start service..."
+sudo tee /etc/systemd/system/aeacus.service > /dev/null << 'EOF'
+[Unit]
+Description=Aeacus CyberPatriot Scoring Engine
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/opt/Aeacus/aeacus server --port 8080
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable aeacus.service
+sudo systemctl start aeacus.service
+echo "[+] Aeacus service enabled (port 8080)"
+
+# ============================================================
+# 7. CLEAR HISTORY (so students can't reverse engineer)
 # ============================================================
 echo "[*] Clearing command history..."
 cat /dev/null > ~/.bash_history
@@ -165,7 +278,7 @@ sudo sh -c 'history -c'
 echo "[+] History cleared"
 
 # ============================================================
-# 5. TEST SCORING
+# 8. TEST SCORING
 # ============================================================
 echo "[*] Testing Aeacus scoring..."
 sudo /opt/Aeacus/aeacus score /opt/Aeacus/images/scoring.yaml
@@ -179,6 +292,7 @@ echo "  - Crontab @reboot entry added"
 echo "  - SSH attack log entry added"
 echo "  - Backdoor script created at /tmp/.sysupdate.sh"
 echo "  - Aeacus config ready at /opt/Aeacus/images/scoring.yaml"
+echo "  - Aeacus service auto-starts on boot (port 8080)"
 echo ""
 echo "Total points: 100"
 echo "  - Remove Goose: 5 pts"
@@ -194,3 +308,7 @@ echo "  - Remove Nmap (scanner): 5 pts"
 echo "  - Remove Gedit: 3 pts"
 echo "  - Remove Calculator: 3 pts"
 echo "  - Remove Solitaire: 4 pts"
+echo ""
+echo "[*] Removing setup script..."
+rm -f ~/setup_forensics.sh
+echo "[+] Setup script deleted"
